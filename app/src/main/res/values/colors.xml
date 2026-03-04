@@ -14,4 +14,6 @@
     
     <color name="success_green">#107C10</color>
     <color name="error_red">#A4262C</color>
+    <color name="ic_launcher_background">#0078D4</color>
+    <color name="splashBackground">#0078D4</color>
 </resources>

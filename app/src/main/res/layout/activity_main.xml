@@ -1,143 +1,337 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface_variant_light">
+    android:background="#F3F3F3"
+    android:fillViewport="true">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:elevation="0dp">
+        android:orientation="vertical">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <!-- Header Bar -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="EDM Management"
-            app:titleTextColor="@color/windows_blue"
-            app:titleCentered="true" />
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="wrap_content"
+            android:background="#0078D4"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="48dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EDM Agent"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enterprise Device Management"
+                android:textColor="#CCE4F7"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Status Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/card_background"
+            android:elevation="2dp"
             android:padding="20dp">
 
-            <!-- Hero Illustration Section -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginBottom="24dp">
-                
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_defender_shield"
-                    android:contentDescription="Security Shield" />
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="System Security Status"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="@color/text_secondary"
-                android:layout_marginBottom="12dp"
-                android:textAllCaps="true"
-                android:letterSpacing="0.1" />
-
-            <!-- Status Card -->
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.EDMAgent.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:strokeWidth="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/tvStatus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Checking endpoint connection..."
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:lineSpacingExtra="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Actions Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="24dp"
-                android:baselineAligned="false">
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEnroll"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Enroll"
-                    app:icon="@android:drawable/ic_menu_add" />
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="20dp"
+                    android:background="#0078D4"
+                    android:layout_marginEnd="12dp"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSync"
-                    style="@style/Widget.EDMAgent.Button"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Sync"
-                    app:icon="@android:drawable/stat_notify_sync" />
+                    android:text="ENROLLMENT STATUS"
+                    android:textColor="#605E5C"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Device Information"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="@color/text_secondary"
-                android:layout_marginBottom="12dp"
-                android:textAllCaps="true"
-                android:letterSpacing="0.1" />
-
-            <!-- Info Card -->
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.EDMAgent.Card"
+                android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:strokeWidth="0dp">
-
-                <TextView
-                    android:id="@+id/tvDeviceInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="Gathering device telemetry..."
-                    android:fontFamily="monospace"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    android:lineSpacingExtra="4dp" />
-            </com.google.android.material.card.MaterialCardView>
+                android:text="Checking status..."
+                android:textColor="#323130"
+                android:textSize="13sp"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="monospace"/>
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp">
+
+            <Button
+                android:id="@+id/btnEnroll"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Enroll Device"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#0078D4"
+                android:stateListAnimator="@null"
+                app:cornerRadius="4dp"/>
+
+            <Button
+                android:id="@+id/btnSync"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Sync Now"
+                android:textSize="14sp"
+                android:textColor="#0078D4"
+                android:backgroundTint="#E8F4FD"
+                android:stateListAnimator="@null"
+                app:cornerRadius="4dp"/>
+
+        </LinearLayout>
+
+        <!-- Device Info Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/card_background"
+            android:elevation="2dp"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="20dp"
+                    android:background="#0078D4"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEVICE INFORMATION"
+                    android:textColor="#605E5C"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+            </LinearLayout>
+
+            <!-- UUID Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Device UUID"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvUuid"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"
+                    android:fontFamily="monospace"/>
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="#EDEBE9" android:layout_marginBottom="12dp"/>
+
+            <!-- Model Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Model"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvModel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Manufacturer Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Manufacturer"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvManufacturer"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="#EDEBE9" android:layout_marginBottom="12dp"/>
+
+            <!-- OS Version Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="OS Version"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvOsVersion"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <!-- SDK Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="SDK Level"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvSdk"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="#EDEBE9" android:layout_marginBottom="12dp"/>
+
+            <!-- Serial Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Serial"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvSerial"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"
+                    android:fontFamily="monospace"/>
+            </LinearLayout>
+
+            <!-- IMEI Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="IMEI"
+                    android:textColor="#605E5C"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tvImei"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#323130"
+                    android:textSize="12sp"
+                    android:fontFamily="monospace"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

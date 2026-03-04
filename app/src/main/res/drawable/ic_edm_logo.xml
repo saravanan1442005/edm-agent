@@ -5,27 +5,30 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#0078D4"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0"/>
+
     <!-- Lock Body -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M34,52h40v26a4,4 0,0 1,-4 4H38a4,4 0,0 1,-4 -4V52z"/>
+        android:pathData="M38,50h32v22a4,4 0,0 1,-4 4H42a4,4 0,0 1,-4 -4V50z"/>
 
     <!-- Lock Shackle -->
     <path
         android:fillColor="#FFFFFF"
         android:strokeColor="#FFFFFF"
-        android:strokeWidth="5"
+        android:strokeWidth="4"
         android:fillAlpha="0"
-        android:pathData="M42,52V40a12,12 0,0 1,24 0v12"/>
+        android:pathData="M42,50V40a12,12 0,0 1,24 0v10"/>
 
-    <!-- Keyhole circle -->
+    <!-- Keyhole -->
     <path
         android:fillColor="#0078D4"
-        android:pathData="M54,60m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0"/>
-
-    <!-- Keyhole stem -->
+        android:pathData="M54,58m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
     <path
         android:fillColor="#0078D4"
-        android:pathData="M51.5,64h5l-1.5,8h-2z"/>
+        android:pathData="M52,62h4l-1,6h-2z"/>
 
 </vector>
