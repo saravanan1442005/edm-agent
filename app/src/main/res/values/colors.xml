@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Windows Blue Palette -->
+    <color name="windows_blue">#0078D4</color>
+    <color name="windows_blue_dark">#005A9E</color>
+    <color name="windows_blue_light">#E1F0FB</color>
+    
+    <color name="surface_variant_light">#F3F3F3</color>
+    <color name="text_primary">#201F1E</color>
+    <color name="text_secondary">#605E5C</color>
+    
+    <color name="success_green">#107C10</color>
+    <color name="error_red">#A4262C</color>
+</resources>
