@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     // Replace with your PC's local IP address
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "https://edm-backend-production.up.railway.app/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

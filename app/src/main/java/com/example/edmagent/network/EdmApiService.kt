@@ -7,6 +7,8 @@ import com.example.edmagent.data.EnrollResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface EdmApiService {
 
@@ -18,4 +20,14 @@ interface EdmApiService {
 
     @POST("api/app-inventory")
     suspend fun sendAppInventory(@Body request: AppInventoryRequest): Response<Map<String, String>>
+
+    @GET("api/commands/{deviceUuid}")
+    suspend fun getPendingCommands(
+        @Path("deviceUuid") deviceUuid: String
+    ): Response<List<Map<String, String>>>
+
+    @POST("api/commands/{id}/executed")
+    suspend fun markCommandExecuted(
+        @Path("id") id: String
+    ): Response<Map<String, String>>
 }

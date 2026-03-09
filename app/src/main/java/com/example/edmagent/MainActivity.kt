@@ -3,12 +3,12 @@ package com.example.edmagent
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.edmagent.collector.AppInventoryCollector
 import com.example.edmagent.collector.DeviceInfoCollector
@@ -16,95 +16,129 @@ import com.example.edmagent.data.AppInventoryRequest
 import com.example.edmagent.data.EnrollRequest
 import com.example.edmagent.network.RetrofitClient
 import com.example.edmagent.receiver.DeviceAdminReceiver
+import com.example.edmagent.worker.CommandPoller
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvStatus: TextView
-    private lateinit var tvUuid: TextView
-    private lateinit var tvModel: TextView
-    private lateinit var tvManufacturer: TextView
-    private lateinit var tvOsVersion: TextView
-    private lateinit var tvSdk: TextView
-    private lateinit var tvSerial: TextView
-    private lateinit var tvImei: TextView
-    private lateinit var btnEnroll: Button
-    private lateinit var btnSync: Button
+    private lateinit var btnEnroll: MaterialButton
+    private lateinit var btnSync: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Hide system status bar decorations for clean look
-        window.statusBarColor = 0xFF0078D4.toInt()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.windows_blue)
 
         tvStatus = findViewById(R.id.tvStatus)
-        tvUuid = findViewById(R.id.tvUuid)
-        tvModel = findViewById(R.id.tvModel)
-        tvManufacturer = findViewById(R.id.tvManufacturer)
-        tvOsVersion = findViewById(R.id.tvOsVersion)
-        tvSdk = findViewById(R.id.tvSdk)
-        tvSerial = findViewById(R.id.tvSerial)
-        tvImei = findViewById(R.id.tvImei)
         btnEnroll = findViewById(R.id.btnEnroll)
         btnSync = findViewById(R.id.btnSync)
 
-        checkDeviceOwnerStatus()
-        displayDeviceInfo()
+        setupDeviceInfoRows()
+        refreshStatus()
+        checkEnrollmentState()
 
         btnEnroll.setOnClickListener { enrollDevice() }
         btnSync.setOnClickListener { syncNow() }
     }
 
-    private fun checkDeviceOwnerStatus() {
-        val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val componentName = ComponentName(this, DeviceAdminReceiver::class.java)
-        val isDeviceOwner = dpm.isDeviceOwnerApp(packageName)
-        val isAdminActive = dpm.isAdminActive(componentName)
+    private fun setupDeviceInfoRows() {
+        val info = DeviceInfoCollector.collect(this)
+        
+        setupRow(findViewById(R.id.rowUuid), "Device UUID", info.deviceUuid)
+        setupRow(findViewById(R.id.rowModel), "Model", info.model)
+        setupRow(findViewById(R.id.rowManufacturer), "Manufacturer", info.manufacturer)
+        setupRow(findViewById(R.id.rowOs), "OS Version", "Android ${info.osVersion}")
+        setupRow(findViewById(R.id.rowSdk), "SDK Level", info.sdkVersion.toString())
+        setupRow(findViewById(R.id.rowSerial), "Serial", info.serialNumber)
+        setupRow(findViewById(R.id.rowImei), "IMEI", info.imei ?: "Not Available")
+    }
 
-        tvStatus.text = buildString {
-            append("Device Owner    ${if (isDeviceOwner) "✔  Active" else "✘  Not Active"}\n")
-            append("Admin Active     ${if (isAdminActive) "✔  Active" else "✘  Not Active"}\n")
-            append("Backend          http://10.0.2.2:8080")
+    private fun setupRow(view: View, label: String, value: String) {
+        view.findViewById<TextView>(R.id.label).text = label
+        view.findViewById<TextView>(R.id.value).text = value
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CommandPoller.start(this)
+        refreshStatus()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        CommandPoller.stop()
+    }
+
+    private fun checkEnrollmentState() {
+        val prefs = getSharedPreferences("edm_prefs", Context.MODE_PRIVATE)
+        if (prefs.getBoolean("is_enrolled", false)) {
+            setEnrolledUI()
         }
     }
 
-    private fun displayDeviceInfo() {
-        val info = DeviceInfoCollector.collect(this)
-        tvUuid.text = info.deviceUuid
-        tvModel.text = info.model
-        tvManufacturer.text = info.manufacturer
-        tvOsVersion.text = "Android ${info.osVersion}"
-        tvSdk.text = info.sdkVersion.toString()
-        tvSerial.text = info.serialNumber
-        tvImei.text = info.imei ?: "N/A"
+    private fun setEnrolledUI() {
+        btnEnroll.isEnabled = false
+        btnEnroll.text = "Enrolled"
+        btnEnroll.icon = ContextCompat.getDrawable(this, android.R.drawable.checkbox_on_background)
+        btnEnroll.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.success_green))
+    }
+
+    private fun refreshStatus() {
+        val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val isDeviceOwner = dpm.isDeviceOwnerApp(packageName)
+        val componentName = ComponentName(this, DeviceAdminReceiver::class.java)
+        val isAdminActive = dpm.isAdminActive(componentName)
+        val isEnrolled = getSharedPreferences("edm_prefs", Context.MODE_PRIVATE).getBoolean("is_enrolled", false)
+
+        tvStatus.text = buildString {
+            if (isEnrolled) {
+                append("● Device Enrolled\n")
+            } else {
+                append("○ Enrollment Pending\n")
+            }
+            // User requested: "change personal device not managed into device owner not activated"
+            append(if (isDeviceOwner) "● Managed by Organization\n" else "○ Device Owner Not Activated\n")
+            append(if (isAdminActive) "● Admin privileges active" else "○ Admin privileges pending")
+        }
     }
 
     private fun enrollDevice() {
         btnEnroll.isEnabled = false
-        btnEnroll.text = "Enrolling..."
+        btnEnroll.text = "Connecting..."
         lifecycleScope.launch {
             try {
                 val deviceUuid = DeviceInfoCollector.getOrCreateUUID(this@MainActivity)
                 val response = RetrofitClient.instance.enroll(
-                    EnrollRequest(
-                        deviceUuid = deviceUuid,
-                        enrollmentToken = "MANUAL_ENROLL"
-                    )
+                    EnrollRequest(deviceUuid, "MANUAL_ENROLL")
                 )
                 if (response.isSuccessful) {
-                    appendStatus("✔  Enrolled successfully\n    ID: ${response.body()?.deviceId?.take(18)}...")
-                    btnEnroll.text = "Enrolled ✔"
+                    val body = response.body()
+                    // Backend logic: handle "ALREADY_ENROLLED" as success
+                    if (body?.status == "ENROLLED" || body?.status == "ALREADY_ENROLLED") {
+                        getSharedPreferences("edm_prefs", Context.MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("is_enrolled", true)
+                            .putString("device_id", body.deviceId)
+                            .apply()
+                        setEnrolledUI()
+                        refreshStatus()
+                    } else {
+                        tvStatus.text = "${tvStatus.text}\n✘ Status: ${body?.status}"
+                        btnEnroll.isEnabled = true
+                        btnEnroll.text = "Retry"
+                    }
                 } else {
-                    appendStatus("✘  Enrollment failed (${response.code()})")
+                    tvStatus.text = "${tvStatus.text}\n✘ Server error: ${response.code()}"
                     btnEnroll.isEnabled = true
-                    btnEnroll.text = "Enroll Device"
+                    btnEnroll.text = "Retry"
                 }
             } catch (e: Exception) {
-                appendStatus("✘  Network error: ${e.message}")
+                tvStatus.text = "${tvStatus.text}\n✘ Network error"
                 btnEnroll.isEnabled = true
-                btnEnroll.text = "Enroll Device"
-                Log.e("MainActivity", "Enroll error", e)
+                btnEnroll.text = "Retry"
             }
         }
     }
@@ -115,34 +149,20 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val deviceUuid = DeviceInfoCollector.getOrCreateUUID(this@MainActivity)
-
-                // Send device info
                 val deviceInfo = DeviceInfoCollector.collect(this@MainActivity)
                 RetrofitClient.instance.sendDeviceInfo(deviceInfo)
 
-                // Send app inventory
                 val apps = AppInventoryCollector.collect(this@MainActivity)
-                val response = RetrofitClient.instance.sendAppInventory(
-                    AppInventoryRequest(deviceUuid = deviceUuid, apps = apps)
-                )
+                RetrofitClient.instance.sendAppInventory(AppInventoryRequest(deviceUuid, apps))
 
-                if (response.isSuccessful) {
-                    appendStatus("✔  Sync complete — ${apps.size} apps transmitted")
-                } else {
-                    appendStatus("✘  Sync failed (${response.code()})")
-                }
-            } catch (e: Exception) {
-                appendStatus("✘  Network error: ${e.message}")
-                Log.e("MainActivity", "Sync error", e)
+                refreshStatus()
+                tvStatus.text = "${tvStatus.text}\n✔ Last sync: Just now"
+            } catch (e: Exception) { // Fixed: Added type annotation ': Exception'
+                tvStatus.text = "${tvStatus.text}\n✘ Sync failed"
             } finally {
                 btnSync.isEnabled = true
                 btnSync.text = "Sync Now"
             }
         }
-    }
-
-    private fun appendStatus(message: String) {
-        val current = tvStatus.text.toString()
-        tvStatus.text = "$current\n$message"
     }
 }
