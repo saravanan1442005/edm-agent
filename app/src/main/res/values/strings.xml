@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">EDM Agent</string>
+    <string name="open_app_inventory">Open App Inventory</string>
+    <string name="app_inventory_title">App Inventory</string>
+    <string name="app_inventory_subtitle">Installed applications listed for quick review</string>
+    <string name="no_installed_apps">No installed apps found</string>
+    <plurals name="app_count">
+        <item quantity="one">%d app</item>
+        <item quantity="other">%d apps</item>
+    </plurals>
 </resources>

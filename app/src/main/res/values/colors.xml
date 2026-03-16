@@ -16,4 +16,19 @@
     <color name="error_red">#A4262C</color>
     <color name="ic_launcher_background">#0078D4</color>
     <color name="splashBackground">#0078D4</color>
+
+    <!-- Dashboard glass UI palette -->
+    <color name="dashboard_gradient_start">#FF0B1D3A</color>
+    <color name="dashboard_gradient_mid">#FF123E70</color>
+    <color name="dashboard_gradient_end">#FF1D6EA4</color>
+    <color name="glass_surface">#33FFFFFF</color>
+    <color name="glass_item_background">#1AFFFFFF</color>
+    <color name="glass_stroke">#55FFFFFF</color>
+    <color name="section_caption">#B3E6F2FF</color>
+    <color name="header_subtitle">#CCDAEEFF</color>
+    <color name="primary_button">#DDF3FAFF</color>
+    <color name="primary_button_text">#FF113A62</color>
+    <color name="status_positive_bg">#3819B35A</color>
+    <color name="status_pending_bg">#337FA7C8</color>
+    <color name="status_negative_bg">#40D14B4B</color>
 </resources>

@@ -3,6 +3,7 @@ package com.example.edmagent
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -23,18 +24,26 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvStatus: TextView
+    private lateinit var tvEnrollmentState: TextView
+    private lateinit var tvOwnerState: TextView
+    private lateinit var tvAdminState: TextView
     private lateinit var btnEnroll: MaterialButton
     private lateinit var btnSync: MaterialButton
+    private lateinit var btnOpenInventory: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.windows_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dashboard_gradient_start)
 
         tvStatus = findViewById(R.id.tvStatus)
+        tvEnrollmentState = findViewById(R.id.tvEnrollmentState)
+        tvOwnerState = findViewById(R.id.tvOwnerState)
+        tvAdminState = findViewById(R.id.tvAdminState)
         btnEnroll = findViewById(R.id.btnEnroll)
         btnSync = findViewById(R.id.btnSync)
+        btnOpenInventory = findViewById(R.id.btnOpenInventory)
 
         setupDeviceInfoRows()
         refreshStatus()
@@ -42,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         btnEnroll.setOnClickListener { enrollDevice() }
         btnSync.setOnClickListener { syncNow() }
+        btnOpenInventory.setOnClickListener {
+            startActivity(Intent(this, AppInventoryActivity::class.java))
+        }
     }
 
     private fun setupDeviceInfoRows() {
@@ -93,15 +105,50 @@ class MainActivity : AppCompatActivity() {
         val isAdminActive = dpm.isAdminActive(componentName)
         val isEnrolled = getSharedPreferences("edm_prefs", Context.MODE_PRIVATE).getBoolean("is_enrolled", false)
 
+        setStatusBadge(
+            view = tvEnrollmentState,
+            isActive = isEnrolled,
+            activeText = "Enrolled",
+            inactiveText = "Pending"
+        )
+        setStatusBadge(
+            view = tvOwnerState,
+            isActive = isDeviceOwner,
+            activeText = "Active",
+            inactiveText = "Inactive",
+            inactiveDrawable = R.drawable.bg_status_chip_negative
+        )
+        setStatusBadge(
+            view = tvAdminState,
+            isActive = isAdminActive,
+            activeText = "Active",
+            inactiveText = "Pending"
+        )
+
         tvStatus.text = buildString {
             if (isEnrolled) {
-                append("● Device Enrolled\n")
+                append("Enrollment complete. ")
             } else {
-                append("○ Enrollment Pending\n")
+                append("Enrollment required. ")
             }
-            // User requested: "change personal device not managed into device owner not activated"
-            append(if (isDeviceOwner) "● Managed by Organization\n" else "○ Device Owner Not Activated\n")
-            append(if (isAdminActive) "● Admin privileges active" else "○ Admin privileges pending")
+            append(if (isDeviceOwner) "Device owner is active. " else "Device owner is not activated. ")
+            append(if (isAdminActive) "Admin privileges are active." else "Admin privileges are pending.")
+        }
+    }
+
+    private fun setStatusBadge(
+        view: TextView,
+        isActive: Boolean,
+        activeText: String,
+        inactiveText: String,
+        inactiveDrawable: Int = R.drawable.bg_status_chip_pending
+    ) {
+        if (isActive) {
+            view.text = activeText
+            view.setBackgroundResource(R.drawable.bg_status_chip_positive)
+        } else {
+            view.text = inactiveText
+            view.setBackgroundResource(inactiveDrawable)
         }
     }
 
@@ -126,17 +173,17 @@ class MainActivity : AppCompatActivity() {
                         setEnrolledUI()
                         refreshStatus()
                     } else {
-                        tvStatus.text = "${tvStatus.text}\n✘ Status: ${body?.status}"
+                        tvStatus.text = "${tvStatus.text}\nStatus update failed: ${body?.status}"
                         btnEnroll.isEnabled = true
                         btnEnroll.text = "Retry"
                     }
                 } else {
-                    tvStatus.text = "${tvStatus.text}\n✘ Server error: ${response.code()}"
+                    tvStatus.text = "${tvStatus.text}\nServer error: ${response.code()}"
                     btnEnroll.isEnabled = true
                     btnEnroll.text = "Retry"
                 }
             } catch (e: Exception) {
-                tvStatus.text = "${tvStatus.text}\n✘ Network error"
+                tvStatus.text = "${tvStatus.text}\nNetwork error"
                 btnEnroll.isEnabled = true
                 btnEnroll.text = "Retry"
             }
@@ -156,9 +203,9 @@ class MainActivity : AppCompatActivity() {
                 RetrofitClient.instance.sendAppInventory(AppInventoryRequest(deviceUuid, apps))
 
                 refreshStatus()
-                tvStatus.text = "${tvStatus.text}\n✔ Last sync: Just now"
+                tvStatus.text = "${tvStatus.text}\nLast sync: Just now"
             } catch (e: Exception) { // Fixed: Added type annotation ': Exception'
-                tvStatus.text = "${tvStatus.text}\n✘ Sync failed"
+                tvStatus.text = "${tvStatus.text}\nSync failed"
             } finally {
                 btnSync.isEnabled = true
                 btnSync.text = "Sync Now"

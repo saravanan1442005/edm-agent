@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AppInventoryActivity"
+            android:exported="false" />
+
         <!-- Device Admin Receiver -->
         <receiver
             android:name=".receiver.DeviceAdminReceiver"

@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface_variant_light">
+    android:background="@drawable/bg_dashboard">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/windows_blue"
+        android:background="@android:color/transparent"
         app:elevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="14dp">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/ic_defender_shield"
-                android:layout_marginBottom="16dp"
-                app:tint="@color/white"/>
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
                 android:text="EDM Agent"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"/>
+                android:textSize="27sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Secure Managed Device"
-                android:textColor="@color/windows_blue_light"
-                android:textSize="14sp" />
-
+                android:layout_marginTop="4dp"
+                android:text="Device security and inventory dashboard"
+                android:textColor="@color/header_subtitle"
+                android:textSize="13sp" />
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="20dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Status Card -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.EDMAgent.GlassCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/windows_blue"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                app:strokeWidth="0dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -74,64 +77,155 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:letterSpacing="0.08"
                         android:text="SECURITY STATUS"
-                        android:textColor="@color/windows_blue_light"
+                        android:textColor="@color/section_caption"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.1"
-                        android:layout_marginBottom="8dp"/>
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="At-a-glance security signals for this device"
+                        android:textColor="@color/header_subtitle"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Enrollment"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvEnrollmentState"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_chip_pending"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="Pending"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Device Owner"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvOwnerState"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_chip_negative"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="Inactive"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Admin Privileges"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAdminState"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_chip_pending"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="Pending"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Initializing..."
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:lineSpacingExtra="4dp"
+                        android:text="Initializing status details..."
+                        android:textColor="@color/header_subtitle"
+                        android:textSize="13sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="14dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnEnroll"
+                    style="@style/Widget.EDMAgent.PrimaryButton"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
+                    android:layout_height="52dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Enroll"
-                    app:cornerRadius="4dp"
-                    android:backgroundTint="@color/windows_blue"
-                    style="@style/Widget.MaterialComponents.Button"/>
+                    android:layout_weight="1"
+                    android:text="Enroll" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSync"
+                    style="@style/Widget.EDMAgent.OutlineButton"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
+                    android:layout_height="52dp"
                     android:layout_marginStart="8dp"
-                    android:text="Sync"
-                    app:cornerRadius="4dp"
-                    app:strokeColor="@color/windows_blue"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/windows_blue"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                    android:layout_weight="1"
+                    android:text="Sync Now" />
             </LinearLayout>
 
-            <!-- Device Info Card -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.EDMAgent.GlassCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/windows_blue"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                app:strokeWidth="0dp">
+                android:layout_marginBottom="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,26 +236,81 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:letterSpacing="0.08"
                         android:text="DEVICE DETAILS"
-                        android:textColor="@color/windows_blue_light"
+                        android:textColor="@color/section_caption"
                         android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.1"
-                        android:layout_marginBottom="16dp"/>
+                        android:textStyle="bold" />
 
-                    <!-- Property Rows -->
-                    <include layout="@layout/item_device_info" android:id="@+id/rowUuid" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowModel" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowManufacturer" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowOs" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowSdk" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowSerial" />
-                    <include layout="@layout/item_device_info" android:id="@+id/rowImei" />
+                    <include
+                        android:id="@+id/rowUuid"
+                        layout="@layout/item_device_info" />
 
+                    <include
+                        android:id="@+id/rowModel"
+                        layout="@layout/item_device_info" />
+
+                    <include
+                        android:id="@+id/rowManufacturer"
+                        layout="@layout/item_device_info" />
+
+                    <include
+                        android:id="@+id/rowOs"
+                        layout="@layout/item_device_info" />
+
+                    <include
+                        android:id="@+id/rowSdk"
+                        layout="@layout/item_device_info" />
+
+                    <include
+                        android:id="@+id/rowSerial"
+                        layout="@layout/item_device_info" />
+
+                    <include
+                        android:id="@+id/rowImei"
+                        layout="@layout/item_device_info" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.EDMAgent.GlassCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:letterSpacing="0.08"
+                        android:text="APP INVENTORY"
+                        android:textColor="@color/section_caption"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:text="View installed applications on a separate page for easier browsing."
+                        android:textColor="@color/header_subtitle"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenInventory"
+                        style="@style/Widget.EDMAgent.PrimaryButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="@string/open_app_inventory" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
